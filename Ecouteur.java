@@ -4,13 +4,11 @@ package test5;
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Ecouteur extends Thread {
     private Socket socClient;
     private ObjectInputStream in; // pour recevoir du client
-    private ObjectOutputStream out; // pour envoyer au client
     private int num;
     private Grille laGrille;
 
@@ -19,16 +17,10 @@ public class Ecouteur extends Thread {
         socClient = s;
         num = n;
         laGrille = g;
-
-        try {
-            out = new ObjectOutputStream(s.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void run() {
-        Message message;
+        Message m;
         Object o;
         boolean continuer = true;
         int joueur = 1;
@@ -66,14 +58,10 @@ public class Ecouteur extends Thread {
                         if (gagner(this.laGrille.getMatrice(), joueur)) {
                             System.out.println("Le joueur " + joueur + " a gagné la partie");
                             // Envoyer le message de victoire
-                            message = new Message("Le joueur " + joueur + " a gagné la partie", num);
-                            envoyerMessage(message);
                             continuer = false;
                         } else if (egalite(this.laGrille.getMatrice())) {
                             System.out.println("Egalité, fin de la partie");
                             // Envoyer le message d'égalité
-                            message = new Message("Egalité", num);
-                            envoyerMessage(message);
                             continuer = false;
                         } else {
                             // Changer le joueur qui peut jouer
@@ -200,13 +188,5 @@ public class Ecouteur extends Thread {
 
     private boolean gagner(int tableau[][], int joueur) {
         return (diagonale(tableau, joueur) || verticale(tableau, joueur) || horizontale(tableau, joueur));
-    }
-
-    public void envoyerMessage(Message message) {
-        try {
-            out.writeObject(message); // Envoie l'objet Message via le flux de sortie
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

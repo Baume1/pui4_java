@@ -20,8 +20,6 @@ public class Client extends JFrame {
     private Grille laGrille;
     private JPanel Couleur;
 
-    private JTextArea messageArea;
-
     public Client(int x) throws HeadlessException {
         super();
         numero = x;
@@ -38,12 +36,6 @@ public class Client extends JFrame {
             laGrille = new Grille(Color.yellow);
         }
         this.add(laGrille, BorderLayout.CENTER);
-
-         // Créer et ajouter la zone de texte pour afficher les messages
-         messageArea = new JTextArea();
-         messageArea.setEditable(false); // Empêcher l'édition du texte
-         JScrollPane scrollPane = new JScrollPane(messageArea); // Ajouter une barre de défilement
-         this.add(scrollPane, BorderLayout.SOUTH);
 
         this.add(Couleur, BorderLayout.SOUTH);
         this.setLocation((x - 1) * 400, 400);
@@ -64,9 +56,5 @@ public class Client extends JFrame {
             System.out.println("Souci de connexion chez le client !!");
         }
 
-    }
-
-    public void setMessage(String message) {
-        this.messageArea.setText(message + "\n"); // Définir le nouveau message
     }
 }
